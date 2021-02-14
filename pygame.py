@@ -8,26 +8,26 @@ height = 600
 width = 1100
 screen = pygame.display.set_mode((width, height))
 
-running_pic = [pygame.image.load(os.path.join('project/project/project pygamr', 'dinosaur_run_one.png')),
-               pygame.image.load(os.path.join('project/project/project pygamr', 'dinosaur_run_two.png'))]
+running_pic = [pygame.image.load(os.path.join('Изображения', 'dinosaur_run_one.png')),
+               pygame.image.load(os.path.join('Изображения', 'dinosaur_run_two.png'))]
 jumping_pic = pygame.image.load(
-    os.path.join('project/project/project pygamr', 'dinosaur_jump.png'))
-ducking_pic = [pygame.image.load(os.path.join('project/project/project pygamr', 'dinosaur_duck_one.png')),
-               pygame.image.load(os.path.join('project/project/project pygamr', 'dinosaur_duck_one.png'))]
-small_cactus_pic = [pygame.image.load(os.path.join('project/project/project pygamr', 'small_cactus_one.png')),
+    os.path.join('Изображения', 'dinosaur_jump.png'))
+ducking_pic = [pygame.image.load(os.path.join('Изображения', 'dinosaur_duck_one.png')),
+               pygame.image.load(os.path.join('Изображения', 'dinosaur_duck_one.png'))]
+small_cactus_pic = [pygame.image.load(os.path.join('Изображения', 'small_cactus_one.png')),
                     pygame.image.load(os.path.join(
-                        'project/project/project pygamr', 'small_cactus_two.png')),
-                    pygame.image.load(os.path.join('project/project/project pygamr', 'small_cactus_three.png'))]
-big_cactus_pic = [pygame.image.load(os.path.join('project/project/project pygamr', 'big_cactus_one.png')),
+                        'Изображения', 'small_cactus_two.png')),
+                    pygame.image.load(os.path.join('Изображения', 'small_cactus_three.png'))]
+big_cactus_pic = [pygame.image.load(os.path.join('Изображения', 'big_cactus_one.png')),
                   pygame.image.load(os.path.join(
-                      'project/project/project pygamr', 'big_cactus_two.png')),
-                  pygame.image.load(os.path.join('project/project/project pygamr', 'big_cactus_three.png'))]
-pterodactyl = [pygame.image.load(os.path.join('project/project/project pygamr', 'pterodactyl_one.png')),
-               pygame.image.load(os.path.join('project/project/project pygamr', 'pterodactyl_two.png'))]
+                      'Изображения', 'big_cactus_two.png')),
+                  pygame.image.load(os.path.join('Изображения', 'big_cactus_three.png'))]
+pterodactyl = [pygame.image.load(os.path.join('Изображения', 'pterodactyl_one.png')),
+               pygame.image.load(os.path.join('Изображения', 'pterodactyl_two.png'))]
 cloud = pygame.image.load(os.path.join(
-    'project/project/project pygamr', 'cloud.png'))
+    'Изображения', 'cloud.png'))
 ground = pygame.image.load(os.path.join(
-    'project/project/project pygamr', 'ground.png'))
+    'Изображения', 'ground.png'))
 
 speed_of_game = 14
 
