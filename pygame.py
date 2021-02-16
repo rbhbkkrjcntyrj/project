@@ -13,7 +13,7 @@ running_pic = [pygame.image.load(os.path.join('Изображения', 'dinosau
 jumping_pic = pygame.image.load(
     os.path.join('Изображения', 'dinosaur_jump.png'))
 ducking_pic = [pygame.image.load(os.path.join('Изображения', 'dinosaur_duck_one.png')),
-               pygame.image.load(os.path.join('Изображения', 'dinosaur_duck_one.png'))]
+               pygame.image.load(os.path.join('Изображения', 'dinosaur_duck_two.png'))]
 small_cactus_pic = [pygame.image.load(os.path.join('Изображения', 'small_cactus_one.png')),
                     pygame.image.load(os.path.join(
                         'Изображения', 'small_cactus_two.png')),
