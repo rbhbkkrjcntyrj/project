@@ -1,12 +1,15 @@
 import pygame
 import os
-import random
+from random import randint
 
 
 pygame.init()
 height = 600
 width = 1100
 screen = pygame.display.set_mode((width, height))
+all_sprites = pygame.sprite.Group()
+
+creator = True
 
 running_pic = [pygame.image.load(os.path.join('Изображения', 'dinosaur_run_one.png')),
                pygame.image.load(os.path.join('Изображения', 'dinosaur_run_two.png'))]
@@ -39,6 +42,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.player = Dinosaur()
         self.cloud = Cloud()
+        #self.cactuses = [Cactus() for _ in range(3)]
 
         self.position_x_two = 0
         self.position_y_two = 380
@@ -72,6 +76,7 @@ class Game:
 
     def play(self):
         fps = 30
+        global creator
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -85,6 +90,14 @@ class Game:
 
             self.cloud.draw(screen)
             self.cloud.update()
+
+            if len(all_sprites.sprites()) == 0:
+                for _ in range(randint(1, 4)):
+                    Cactus(all_sprites)
+                creator = False
+
+            all_sprites.draw(screen)
+            all_sprites.update()
 
             self.background()
 
@@ -128,7 +141,7 @@ class Dinosaur:
         if self.step_index >= 10:
             self.step_index = 0
 
-        if event[pygame.K_UP] and not self.dinosaur_jump:
+        if event[pygame.K_UP] and not self.dinosaur_jump and self.dinosaur_rect.y == 310:
             self.dinosaur_duck = False
             self.dinosaur_run = False
             self.dinosaur_jump = True
@@ -172,8 +185,8 @@ class Dinosaur:
 
 class Cloud:
     def __init__(self):
-        self.position_x_cloud = width + random.randint(800, 1000)
-        self.position_y_cloud = random.randint(50, 100)
+        self.position_x_cloud = width + randint(80, 100)
+        self.position_y_cloud = randint(50, 100)
         self.image = cloud
         self.width = self.image.get_width()
 
@@ -181,13 +194,47 @@ class Cloud:
         global speed_of_game
         self.position_x_cloud -= speed_of_game
         if self.position_x_cloud < -self.width:
-            self.position_x_cloud = width + random.randint(2500, 3000)
-            self.position_y_cloud = random.randint(50, 100)
+            self.position_x_cloud = width + randint(2500, 3000)
+            self.position_y_cloud = randint(50, 100)
 
     def draw(self, screen):
         screen.blit(self.image, (self.position_x_cloud, self.position_y_cloud))
 
 
+class Cactus(pygame.sprite.Sprite):
+    #image =
+    def __init__(self, group):
+        super().__init__(group)
+        #self.sprite = pygame.sprite.Sprite(group)
+        self.image = [small_cactus_pic[randint(
+            0, 1)], big_cactus_pic[randint(0, 2)]][randint(0, 1)]
+        #Cactus.image
+        #self.sprite.image = [small_cactus_pic[randint(0, 1)], big_cactus_pic[randint(0, 2)]][randint(0, 1)]
+        self.rect = self.image.get_rect()
+        self.rect.x = width + randint(80, 320) + \
+            160 * len(all_sprites.sprites())
+        # rect. == position_
+        if self.image in small_cactus_pic:
+            self.rect.y = 340
+        else:
+            self.rect.y = 310
+        #self.rect.y = 340
+        #self.image = [small_cactus_pic[randint(0, 1)], big_cactus_pic[randint(0, 2)]][randint(0, 1)]
+        self.width = self.image.get_width()
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def update(self):
+        global speed_of_game, creator
+        self.rect.x -= speed_of_game
+        if self.rect.x <= -self.width:
+            #self.rect.x = width + randint(80, 100) + 100 * len(all_sprites.sprites())
+            self.kill()
+            creator = True
+
+
+    #def draw(self, screen):
+        #all_sprites.draw(screen)
+        #screen.blit(self.image, (self.position_x, self.position_y))
 if __name__ == '__main__':
     game = Game()
     game.play()
