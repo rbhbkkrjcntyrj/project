@@ -8,6 +8,7 @@ height = 600
 width = 1100
 screen = pygame.display.set_mode((width, height))
 all_sprites = pygame.sprite.Group()
+dino_sprite = pygame.sprite.Group()
 
 creator = True
 
@@ -124,13 +125,14 @@ class Dinosaur:
 
         self.step_index = 0
         self.jump_val = self.jump_val_first
-        self.image = self.run_img[0]
-        self.dinosaur_rect = self.image.get_rect()
-        self.dinosaur_rect.x = self.position_x
-        self.dinosaur_rect.y = self.position_y
+        self.sprite = pygame.sprite.Sprite()
+        self.sprite.image = self.run_img[0]
+        # rect == rect
+        self.sprite.rect = self.sprite.image.get_rect()
+        self.sprite.rect.x = self.position_x
+        self.sprite.rect.y = self.position_y
 
     def update(self, event):
-
         if self.dinosaur_duck:
             self.duck()
         if self.dinosaur_run:
@@ -141,7 +143,7 @@ class Dinosaur:
         if self.step_index >= 10:
             self.step_index = 0
 
-        if event[pygame.K_UP] and not self.dinosaur_jump and self.dinosaur_rect.y == 310:
+        if event[pygame.K_UP] and not self.dinosaur_jump and self.sprite.rect.y == 310:
             self.dinosaur_duck = False
             self.dinosaur_run = False
             self.dinosaur_jump = True
@@ -157,30 +159,32 @@ class Dinosaur:
             self.dinosaur_jump = False
 
     def duck(self):
-        self.image = self.duck_img[self.step_index // 5]
-        self.dinosaur_rect = self.image.get_rect()
-        self.dinosaur_rect.x = self.position_x
-        self.dinosaur_rect.y = self.position_y_of_duck
+        self.sprite.image = self.duck_img[self.step_index // 5]
+        self.sprite.rect = self.sprite.image.get_rect()
+        self.sprite.rect.x = self.position_x
+        self.sprite.rect.y = self.position_y_of_duck
         self.step_index += 1
 
     def run(self):
-        self.image = self.run_img[self.step_index // 5]
-        self.dinosaur_rect = self.image.get_rect()
-        self.dinosaur_rect.x = self.position_x
-        self.dinosaur_rect.y = self.position_y
+        self.sprite.image = self.run_img[self.step_index // 5]
+        self.sprite.rect = self.sprite.image.get_rect()
+        self.sprite.rect.x = self.position_x
+        self.sprite.rect.y = self.position_y
         self.step_index += 1
 
     def jump(self):
-        self.image = self.jump_img
+        self.sprite.image = self.jump_img
         if self.dinosaur_jump:
-            self.dinosaur_rect.y -= self.jump_val * 4
+            self.sprite.rect.y -= self.jump_val * 4
             self.jump_val -= 0.8
         if self.jump_val < - self.jump_val_first:
             self.dinosaur_jump = False
             self.jump_val = self.jump_val_first
 
     def draw(self, screen):
-        screen.blit(self.image, (self.dinosaur_rect.x, self.dinosaur_rect.y))
+        dino_sprite.add(self.sprite)
+        dino_sprite.draw(screen)
+        #screen.blit(self.image, (self.rect.x, self.rect.y))
 
 
 class Cloud:
@@ -211,8 +215,8 @@ class Cactus(pygame.sprite.Sprite):
         #Cactus.image
         #self.sprite.image = [small_cactus_pic[randint(0, 1)], big_cactus_pic[randint(0, 2)]][randint(0, 1)]
         self.rect = self.image.get_rect()
-        self.rect.x = width + randint(80, 320) + \
-            160 * len(all_sprites.sprites())
+        self.rect.x = width + randint(80, 160) + \
+            240 * len(all_sprites.sprites())
         # rect. == position_
         if self.image in small_cactus_pic:
             self.rect.y = 340
