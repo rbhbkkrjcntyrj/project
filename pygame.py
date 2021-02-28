@@ -1,19 +1,23 @@
 import pygame
 import os
-import random
+from random import randint
 
 
 pygame.init()
 height = 600
 width = 1100
 screen = pygame.display.set_mode((width, height))
+all_sprites = pygame.sprite.Group()
+dino_sprite = pygame.sprite.Group()
+
+creator = True
 
 running_pic = [pygame.image.load(os.path.join('Изображения', 'dinosaur_run_one.png')),
                pygame.image.load(os.path.join('Изображения', 'dinosaur_run_two.png'))]
 jumping_pic = pygame.image.load(
               os.path.join('Изображения', 'dinosaur_jump.png'))
 ducking_pic = [pygame.image.load(os.path.join('Изображения', 'dinosaur_duck_one.png')),
-               pygame.image.load(os.path.join('Изображения', 'dinosaur_duck_one.png'))]
+               pygame.image.load(os.path.join('Изображения', 'dinosaur_duck_two.png'))]
 small_cactus_pic = [pygame.image.load(os.path.join('Изображения', 'small_cactus_one.png')),
                     pygame.image.load(os.path.join('Изображения', 'small_cactus_two.png')),
                     pygame.image.load(os.path.join('Изображения', 'small_cactus_three.png'))]
@@ -37,6 +41,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.player = Dinosaur()
         self.cloud = Cloud()
+        #self.cactuses = [Cactus() for _ in range(3)]
 
         self.position_x_two = 0
         self.position_y_two = 380
@@ -70,6 +75,7 @@ class Game:
 
     def play(self):
         fps = 30
+        global creator
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -83,6 +89,14 @@ class Game:
 
             self.cloud.draw(screen)
             self.cloud.update()
+
+            if len(all_sprites.sprites()) == 0:
+                for _ in range(randint(1, 4)):
+                    Cactus(all_sprites)
+                creator = False
+
+            all_sprites.draw(screen)
+            all_sprites.update()
 
             self.background()
 
@@ -109,13 +123,14 @@ class Dinosaur:
 
         self.step_index = 0
         self.jump_val = self.jump_val_first
-        self.image = self.run_img[0]
-        self.dinosaur_rect = self.image.get_rect()
-        self.dinosaur_rect.x = self.position_x
-        self.dinosaur_rect.y = self.position_y
+        self.sprite = pygame.sprite.Sprite()
+        self.sprite.image = self.run_img[0]
+        # rect == rect
+        self.sprite.rect = self.sprite.image.get_rect()
+        self.sprite.rect.x = self.position_x
+        self.sprite.rect.y = self.position_y
 
     def update(self, event):
-
         if self.dinosaur_duck:
             self.duck()
         if self.dinosaur_run:
@@ -126,7 +141,7 @@ class Dinosaur:
         if self.step_index >= 10:
             self.step_index = 0
 
-        if event[pygame.K_UP] and not self.dinosaur_jump:
+        if event[pygame.K_UP] and not self.dinosaur_jump and self.sprite.rect.y == 310:
             self.dinosaur_duck = False
             self.dinosaur_run = False
             self.dinosaur_jump = True
@@ -142,36 +157,38 @@ class Dinosaur:
             self.dinosaur_jump = False
 
     def duck(self):
-        self.image = self.duck_img[self.step_index // 5]
-        self.dinosaur_rect = self.image.get_rect()
-        self.dinosaur_rect.x = self.position_x
-        self.dinosaur_rect.y = self.position_y_of_duck
+        self.sprite.image = self.duck_img[self.step_index // 5]
+        self.sprite.rect = self.sprite.image.get_rect()
+        self.sprite.rect.x = self.position_x
+        self.sprite.rect.y = self.position_y_of_duck
         self.step_index += 1
 
     def run(self):
-        self.image = self.run_img[self.step_index // 5]
-        self.dinosaur_rect = self.image.get_rect()
-        self.dinosaur_rect.x = self.position_x
-        self.dinosaur_rect.y = self.position_y
+        self.sprite.image = self.run_img[self.step_index // 5]
+        self.sprite.rect = self.sprite.image.get_rect()
+        self.sprite.rect.x = self.position_x
+        self.sprite.rect.y = self.position_y
         self.step_index += 1
 
     def jump(self):
-        self.image = self.jump_img
+        self.sprite.image = self.jump_img
         if self.dinosaur_jump:
-            self.dinosaur_rect.y -= self.jump_val * 4
+            self.sprite.rect.y -= self.jump_val * 4
             self.jump_val -= 0.8
         if self.jump_val < - self.jump_val_first:
             self.dinosaur_jump = False
             self.jump_val = self.jump_val_first
 
     def draw(self, screen):
-        screen.blit(self.image, (self.dinosaur_rect.x, self.dinosaur_rect.y))
+        dino_sprite.add(self.sprite)
+        dino_sprite.draw(screen)
+        #screen.blit(self.image, (self.rect.x, self.rect.y))
 
 
 class Cloud:
     def __init__(self):
-        self.position_x_cloud = width + random.randint(800, 1000)
-        self.position_y_cloud = random.randint(50, 100)
+        self.position_x_cloud = width + randint(80, 100)
+        self.position_y_cloud = randint(50, 100)
         self.image = cloud
         self.width = self.image.get_width()
 
@@ -179,13 +196,47 @@ class Cloud:
         global speed_of_game
         self.position_x_cloud -= speed_of_game
         if self.position_x_cloud < -self.width:
-            self.position_x_cloud = width + random.randint(2500, 3000)
-            self.position_y_cloud = random.randint(50, 100)
+            self.position_x_cloud = width + randint(2500, 3000)
+            self.position_y_cloud = randint(50, 100)
 
     def draw(self, screen):
         screen.blit(self.image, (self.position_x_cloud, self.position_y_cloud))
 
 
+class Cactus(pygame.sprite.Sprite):
+    #image =
+    def __init__(self, group):
+        super().__init__(group)
+        #self.sprite = pygame.sprite.Sprite(group)
+        self.image = [small_cactus_pic[randint(
+            0, 1)], big_cactus_pic[randint(0, 2)]][randint(0, 1)]
+        #Cactus.image
+        #self.sprite.image = [small_cactus_pic[randint(0, 1)], big_cactus_pic[randint(0, 2)]][randint(0, 1)]
+        self.rect = self.image.get_rect()
+        self.rect.x = width + randint(80, 160) + \
+            240 * len(all_sprites.sprites())
+        # rect. == position_
+        if self.image in small_cactus_pic:
+            self.rect.y = 340
+        else:
+            self.rect.y = 310
+        #self.rect.y = 340
+        #self.image = [small_cactus_pic[randint(0, 1)], big_cactus_pic[randint(0, 2)]][randint(0, 1)]
+        self.width = self.image.get_width()
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def update(self):
+        global speed_of_game, creator
+        self.rect.x -= speed_of_game
+        if self.rect.x <= -self.width:
+            #self.rect.x = width + randint(80, 100) + 100 * len(all_sprites.sprites())
+            self.kill()
+            creator = True
+
+
+    #def draw(self, screen):
+        #all_sprites.draw(screen)
+        #screen.blit(self.image, (self.position_x, self.position_y))
 if __name__ == '__main__':
     game = Game()
     game.play()
