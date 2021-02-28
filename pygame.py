@@ -39,7 +39,6 @@ speed_of_game = 14
 class Game:
     def __init__(self):
         self.running = True
-
         self.clock = pygame.time.Clock()
         self.player = Dinosaur()
         self.cloud = Cloud()
@@ -77,7 +76,6 @@ class Game:
 
     def play(self):
         fps = 30
-        global creator
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -95,7 +93,10 @@ class Game:
             if len(all_sprites.sprites()) == 0:
                 for _ in range(randint(1, 4)):
                     Cactus(all_sprites)
-                creator = False
+            #условие на проверку столкновения
+            if pygame.sprite.spritecollideany(self.player, all_sprites):
+                self.points_of_player = 0
+                self.running = False
 
             all_sprites.draw(screen)
             all_sprites.update()
@@ -108,13 +109,14 @@ class Game:
             pygame.display.update()
 
 
-class Dinosaur:
+class Dinosaur(pygame.sprite.Sprite):
     position_x = 80
     position_y = 310
     position_y_of_duck = 340
     jump_val_first = 8.5
 
     def __init__(self):
+        super().__init__(dino_sprite)
         self.duck_img = ducking_pic
         self.run_img = running_pic
         self.jump_img = jumping_pic
@@ -125,12 +127,14 @@ class Dinosaur:
 
         self.step_index = 0
         self.jump_val = self.jump_val_first
-        self.sprite = pygame.sprite.Sprite()
-        self.sprite.image = self.run_img[0]
+        #self.sprite = pygame.sprite.Sprite()
+        #sprite = ""
+        self.image = self.run_img[0]
+        self.mask = pygame.mask.from_surface(self.image)
         # rect == rect
-        self.sprite.rect = self.sprite.image.get_rect()
-        self.sprite.rect.x = self.position_x
-        self.sprite.rect.y = self.position_y
+        self.rect = self.image.get_rect()
+        self.rect.x = self.position_x
+        self.rect.y = self.position_y
 
     def update(self, event):
         if self.dinosaur_duck:
@@ -143,7 +147,7 @@ class Dinosaur:
         if self.step_index >= 10:
             self.step_index = 0
 
-        if event[pygame.K_UP] and not self.dinosaur_jump and self.sprite.rect.y == 310:
+        if event[pygame.K_UP] and not self.dinosaur_jump and self.rect.y == 310:
             self.dinosaur_duck = False
             self.dinosaur_run = False
             self.dinosaur_jump = True
@@ -158,31 +162,43 @@ class Dinosaur:
             self.dinosaur_run = True
             self.dinosaur_jump = False
 
+        #if pygame.sprite.collide_mask(dino_sprite, all_sprites):
+            #game.points_of_player = 0
+
     def duck(self):
-        self.sprite.image = self.duck_img[self.step_index // 5]
-        self.sprite.rect = self.sprite.image.get_rect()
-        self.sprite.rect.x = self.position_x
-        self.sprite.rect.y = self.position_y_of_duck
+        self.image = self.duck_img[self.step_index // 5]
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = self.position_x
+        self.rect.y = self.position_y_of_duck
+        #dino_sprite.add(self.sprite)
         self.step_index += 1
 
     def run(self):
-        self.sprite.image = self.run_img[self.step_index // 5]
-        self.sprite.rect = self.sprite.image.get_rect()
-        self.sprite.rect.x = self.position_x
-        self.sprite.rect.y = self.position_y
+        self.image = self.run_img[self.step_index // 5]
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = self.position_x
+        self.rect.y = self.position_y
+        #dino_sprite.add(self.sprite)
         self.step_index += 1
 
     def jump(self):
-        self.sprite.image = self.jump_img
+        self.image = self.jump_img
+        self.mask = pygame.mask.from_surface(self.image)
         if self.dinosaur_jump:
-            self.sprite.rect.y -= self.jump_val * 4
+            self.rect.y -= self.jump_val * 4
             self.jump_val -= 0.8
         if self.jump_val < - self.jump_val_first:
             self.dinosaur_jump = False
             self.jump_val = self.jump_val_first
+        #self.rect = self.image.get_rect()
+        #self.rect.x = self.position_x
+        #self.rect.y = self.position_y
+        #dino_sprite.add(self.sprite)
 
     def draw(self, screen):
-        dino_sprite.add(self.sprite)
+        dino_sprite.add(self)
         dino_sprite.draw(screen)
         #screen.blit(self.image, (self.rect.x, self.rect.y))
 
@@ -228,17 +244,12 @@ class Cactus(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):
-        global speed_of_game, creator
+        global speed_of_game
         self.rect.x -= speed_of_game
         if self.rect.x <= -self.width:
             #self.rect.x = width + randint(80, 100) + 100 * len(all_sprites.sprites())
             self.kill()
-            creator = True
-
 
     #def draw(self, screen):
         #all_sprites.draw(screen)
         #screen.blit(self.image, (self.position_x, self.position_y))
-if __name__ == '__main__':
-    game = Game()
-    game.play()
