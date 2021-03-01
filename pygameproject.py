@@ -93,8 +93,9 @@ class Game:
             all_sprites.update()
             cloud_sprites.draw(screen)
             cloud_sprites.update()
-            #условие на проверку столкновения
-            if pygame.sprite.spritecollideany(self.player, all_sprites) or pygame.sprite.spritecollideany(self.player, ptero):
+            #  условие на проверку столкновения
+            if pygame.sprite.spritecollideany(self.player, all_sprites)\
+                    or pygame.sprite.spritecollideany(self.player, ptero):
                 speed_of_game = 0
                 with open('projectsave.json') as file:
                     f = file.read()
