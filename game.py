@@ -3,23 +3,22 @@ import pygameproject
 from importlib import reload
 import json
 
-
 pygame.init()
 height = 600
 width = 1100
 screenhome = pygame.display.set_mode((width, height))
 running = True
-sostbut = ("ДА",  "НЕТ")
+sostbut = ("ДА", "НЕТ")
 colors = [pygame.Color("red"), pygame.Color(
     "orange"), pygame.Color(
-        "yellow"), pygame.Color(
-            "green"), pygame.Color(
-                "blue"), pygame.Color(
-                    "pink"), pygame.Color(
-                        "purple"), pygame.Color(
-                            "black"), pygame.Color(
-                                "white"), pygame.Color(
-                                    "grey")]
+    "yellow"), pygame.Color(
+    "green"), pygame.Color(
+    "blue"), pygame.Color(
+    "pink"), pygame.Color(
+    "purple"), pygame.Color(
+    "black"), pygame.Color(
+    "white"), pygame.Color(
+    "grey")]
 with open('projectsave.json') as file:
     f = file.read()
     data = json.loads(f)
@@ -108,8 +107,8 @@ class Endgame:
                 "Начать заново?", True, textcolor)
             screenhome.blit(startbutton, (text_x, text_y * 4))
             with open('projectsave.json') as file:
-                    f = file.read()
-                    data = json.loads(f)
+                f = file.read()
+                data = json.loads(f)
             shbutton = font.render(
                 "Ваш счёт: " + str(data["playerpoint"]), True, textcolor)
             screenhome.blit(shbutton, (text_x, text_y * 2))
@@ -151,12 +150,12 @@ class RecordTable:
             text_w = text.get_width()
             text_h = text.get_height()
             with open('projectsave.json') as file:
-                    f = file.read()
-                    data = json.loads(f)
-                    for i in range(1, 9):
-                        text = font.render(str(i) + ". " +
-                                           str(data["records"][i - 1]), True, textcolor)
-                        screenhome.blit(text, (text_x, text_y * i))
+                f = file.read()
+                data = json.loads(f)
+                for i in range(1, 9):
+                    text = font.render(str(i) + ". " +
+                                       str(data["records"][i - 1]), True, textcolor)
+                    screenhome.blit(text, (text_x, text_y * i))
             tableb = pygame.Rect(text_x - 10, text_y * 10 - 60,
                                  text_w + 20, text_h + 20)
             pygame.draw.rect(screenhome, buttoncolor, tableb, buttonfill)
@@ -214,42 +213,42 @@ class Options:
             nul = font.render("Обнулить рекорды", True, textcolor)
             screenhome.blit(nul, (text_x, text_y * 8 - 50))
             for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        qsave()
-                        running = False
-                    if event.type == pygame.MOUSEBUTTONDOWN and tableb.collidepoint(event.pos):
-                        Startscreen()
-                    if event.type == pygame.MOUSEBUTTONDOWN and col3b.collidepoint(event.pos):
-                        if buttoncolor != textcolor:
-                            buttonfill = (buttonfill + 1) % 2
-                    if event.type == pygame.MOUSEBUTTONDOWN and nulb.collidepoint(event.pos):
-                        with open('projectsave.json') as file:
-                            f = file.read()
-                            data = json.loads(f)
-                            data["records"] = [0, 0, 0, 0, 0, 0, 0, 0]
-                            with open('projectsave.json', "w") as file:
-                                json.dump(data, file, ensure_ascii=False)
-                    if event.type == pygame.MOUSEBUTTONDOWN and col1b.collidepoint(event.pos):
-                        textsh = (textsh + 1) % 10
-                        if screensh != textsh != buttonsh:
-                            textcolor = colors[textsh]
-                    if event.type == pygame.MOUSEBUTTONDOWN and colb.collidepoint(event.pos):
-                        screensh = (screensh + 1) % 10
-                        if buttonsh != screensh != textsh:
-                            screencolor = colors[screensh]
-                    if event.type == pygame.MOUSEBUTTONDOWN and col2b.collidepoint(event.pos):
-                        buttonsh = (buttonsh + 1) % 10
-                        if screensh != buttonsh != textsh:
-                            buttoncolor = colors[buttonsh]
-                    if event.type == pygame.MOUSEBUTTONDOWN and baseb.collidepoint(event.pos):
-                        qsave()
-                        buttonsh = 3
-                        screensh = 7
-                        textsh = 3
-                        buttonfill = 1
-                        buttoncolor = colors[buttonsh]
-                        screencolor = colors[screensh]
+                if event.type == pygame.QUIT:
+                    qsave()
+                    running = False
+                if event.type == pygame.MOUSEBUTTONDOWN and tableb.collidepoint(event.pos):
+                    Startscreen()
+                if event.type == pygame.MOUSEBUTTONDOWN and col3b.collidepoint(event.pos):
+                    if buttoncolor != textcolor:
+                        buttonfill = (buttonfill + 1) % 2
+                if event.type == pygame.MOUSEBUTTONDOWN and nulb.collidepoint(event.pos):
+                    with open('projectsave.json') as file:
+                        f = file.read()
+                        data = json.loads(f)
+                        data["records"] = [0, 0, 0, 0, 0, 0, 0, 0]
+                        with open('projectsave.json', "w") as file:
+                            json.dump(data, file, ensure_ascii=False)
+                if event.type == pygame.MOUSEBUTTONDOWN and col1b.collidepoint(event.pos):
+                    textsh = (textsh + 1) % 10
+                    if screensh != textsh != buttonsh:
                         textcolor = colors[textsh]
+                if event.type == pygame.MOUSEBUTTONDOWN and colb.collidepoint(event.pos):
+                    screensh = (screensh + 1) % 10
+                    if buttonsh != screensh != textsh:
+                        screencolor = colors[screensh]
+                if event.type == pygame.MOUSEBUTTONDOWN and col2b.collidepoint(event.pos):
+                    buttonsh = (buttonsh + 1) % 10
+                    if screensh != buttonsh != textsh:
+                        buttoncolor = colors[buttonsh]
+                if event.type == pygame.MOUSEBUTTONDOWN and baseb.collidepoint(event.pos):
+                    qsave()
+                    buttonsh = 3
+                    screensh = 7
+                    textsh = 3
+                    buttonfill = 1
+                    buttoncolor = colors[buttonsh]
+                    screencolor = colors[screensh]
+                    textcolor = colors[textsh]
             pygame.display.flip()
 
 
