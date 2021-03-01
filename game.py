@@ -43,6 +43,7 @@ def qsave():
             json.dump(data, file, ensure_ascii=False)
 
 
+# класс для создание и функций стартого экрана
 class Startscreen:
     def __init__(self):
         global running
@@ -88,6 +89,8 @@ class Startscreen:
                     Options()
 
 
+                    
+# класс для создание и функций конечного экрана
 class Endgame:
     def __init__(self):
         global running
@@ -131,6 +134,8 @@ class Endgame:
                     Startscreen()
 
 
+                    
+# класс для создание и функций таблицы рекордов
 class RecordTable:
     def __init__(self):
         global running
@@ -164,6 +169,8 @@ class RecordTable:
             pygame.display.flip()
 
 
+            
+# класс для создание и функций заливки, цвета кнопки, цвета экрана, проверки нажатия и т.д.
 class Options:
     def __init__(self):
         global running, buttonfill, textsh, screensh, buttonsh, textcolor, buttoncolor, screencolor
@@ -252,6 +259,8 @@ class Options:
             pygame.display.flip()
 
 
+            
+# класс для проверки ошибок и вывода 
 class Fault:
     def __init__(self):
         global running
