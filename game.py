@@ -30,7 +30,7 @@ screencolor = colors[screensh]
 textcolor = colors[textsh]
 buttoncolor = colors[buttonsh]
 
-
+#функция для сохранения данных в json-файл
 def qsave():
     with open('projectsave.json') as file:
         f = file.read()
@@ -135,7 +135,7 @@ class Endgame:
 
 
                     
-# класс для создание и функций таблицы рекордов
+# класс для вывода таблицы рекордов из сохранённых
 class RecordTable:
     def __init__(self):
         global running
@@ -170,7 +170,7 @@ class RecordTable:
 
 
             
-# класс для создание и функций заливки, цвета кнопки, цвета экрана, проверки нажатия и т.д.
+# класс для изменения заливки, цвета кнопки, цвета экрана, проверки нажатия кнопок обозначающих эти ф-ии
 class Options:
     def __init__(self):
         global running, buttonfill, textsh, screensh, buttonsh, textcolor, buttoncolor, screencolor
@@ -260,7 +260,7 @@ class Options:
 
 
             
-# класс для проверки ошибок и вывода 
+# класс вывода сообщения об ощибке в случае проблемы 
 class Fault:
     def __init__(self):
         global running
