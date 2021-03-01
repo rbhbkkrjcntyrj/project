@@ -35,6 +35,7 @@ ground = pygame.image.load(os.path.join(
 speed_of_game = 14
 
 
+#  класс, в котором создаются функции для скорости игры, счёта игры и т.д.
 class Game:
     def __init__(self):
         self.running = True
@@ -44,7 +45,8 @@ class Game:
         self.position_y_two = 380
         self.points_of_player = 0
         self.font = pygame.font.Font('freesansbold.ttf', 20)
-
+        
+    #  счёт и скорость
     def score(self):
         global speed_of_game
         self.points_of_player += 1
@@ -68,6 +70,7 @@ class Game:
             self.position_x_two = 0
         self.position_x_two -= speed_of_game
 
+    #  столкновения
     def play(self):
         global speed_of_game
         fps = 30
@@ -120,6 +123,7 @@ class Game:
             pygame.display.update()
 
 
+#  класс, в котором создаются функции для бега, прыжков и нагибаний динозавтра, а также его отрисовки
 class Dinosaur(pygame.sprite.Sprite):
     position_x = 80
     position_y = 310
@@ -142,6 +146,7 @@ class Dinosaur(pygame.sprite.Sprite):
         self.rect.x = self.position_x
         self.rect.y = self.position_y
 
+    #  проверка на нажатие клавиш и в сависимости от них выбор функций 
     def update(self, event):
         if self.dinosaur_duck:
             self.duck()
@@ -164,6 +169,7 @@ class Dinosaur(pygame.sprite.Sprite):
             self.dinosaur_run = True
             self.dinosaur_jump = False
 
+    # нагибание
     def duck(self):
         self.image = self.duck_img[self.step_index // 5]
         self.mask = pygame.mask.from_surface(self.image)
@@ -172,6 +178,7 @@ class Dinosaur(pygame.sprite.Sprite):
         self.rect.y = self.position_y_of_duck
         self.step_index += 1
 
+    #  бег
     def run(self):
         self.image = self.run_img[self.step_index // 5]
         self.mask = pygame.mask.from_surface(self.image)
@@ -180,6 +187,7 @@ class Dinosaur(pygame.sprite.Sprite):
         self.rect.y = self.position_y
         self.step_index += 1
 
+    #  прыжок
     def jump(self):
         self.image = self.jump_img
         self.mask = pygame.mask.from_surface(self.image)
@@ -190,11 +198,13 @@ class Dinosaur(pygame.sprite.Sprite):
             self.dinosaur_jump = False
             self.jump_val = self.jump_val_first
 
+    #  отрисовка
     def draw(self, screen):
         dino_sprite.add(self)
         dino_sprite.draw(screen)
 
 
+#  класс для отрисовки облака и его местоположения
 class Cloud(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
@@ -211,7 +221,7 @@ class Cloud(pygame.sprite.Sprite):
         if self.rect.x <= -self.width:
             self.kill()
 
-
+#  класс для отрисовки кактуса и его местоположения
 class Cactus(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
@@ -233,7 +243,7 @@ class Cactus(pygame.sprite.Sprite):
         if self.rect.x <= -self.width:
             self.kill()
 
-
+#  класс для отрисовки птеродактиля и его местоположения, а также изменения его скорости
 class Pterodactyl(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(ptero)
